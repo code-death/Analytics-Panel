@@ -34,6 +34,7 @@ const FilterModal = (props) => {
       max_value_Object[requiredElement[0].item]) *
       100,
   ]);
+  const [selectedApps, setSelectedApps] = useState(appData.data)
 
   const handleChange = (e) => {
     setValue(e);
@@ -50,38 +51,35 @@ const FilterModal = (props) => {
     );
     dispatch(
       filterElementOut({
-        array: filterElements(),
+        array: filterElements( Math.ceil((max_value_Object[requiredElement[0].item] * value[0]) / 100), Math.ceil((max_value_Object[requiredElement[0].item] * value[1]) / 100), ),
         element: requiredElement[0].heading,
       })
     );
   };
 
   const handleReset = () => {
-    setValue([0, Number.POSITIVE_INFINITY]);
     dispatch(updateFilterState(requiredElement[0].heading));
     dispatch(
       updateFilterRange([
         requiredElement[0].heading,
         0,
-        Number.POSITIVE_INFINITY,
+        Math.ceil(max_value_Object[requiredElement[0].item]),
       ])
     );
+    setValue([0, Math.ceil(max_value_Object[requiredElement[0].item])])
     dispatch(
       filterElementOut({
-        array: filterElements(),
+        array: filterElements(0, Math.ceil(max_value_Object[requiredElement[0].item])),
         element: requiredElement[0].heading,
       })
     );
   };
 
-  const filterElements = () => {
+  const filterElements = (a, b) => {
     const filteredRows = [];
     data.data.map((child, i) => {
       if (
-        child[requiredElement[0].item] >=
-          (max_value_Object[requiredElement[0].item] * value[0]) / 100 &&
-        child[requiredElement[0].item] <=
-          (max_value_Object[requiredElement[0].item] * value[1]) / 100
+        child[requiredElement[0].item] >= a && child[requiredElement[0].item] <= b
       ) {
         filteredRows.push(i);
       }
@@ -89,12 +87,16 @@ const FilterModal = (props) => {
     return filteredRows;
   };
 
+  const handleAppSelect = () => {
+
+  }
+
   if (
     requiredElement[0].heading !== "Date" &&
     requiredElement[0].heading !== "App"
   ) {
     innerContent = (
-      <>
+      <div className="modal">
         <RangeSlider
           tooltip={false}
           onChange={handleChange}
@@ -121,11 +123,11 @@ const FilterModal = (props) => {
             Apply
           </button>
         </div>
-      </>
+        </div>
     );
-  } else {
+  } else if (requiredElement[0].heading === "App") {
     innerContent = (
-      <>
+      <div className="modal">
         <input
           className="search"
           type="text"
@@ -133,19 +135,19 @@ const FilterModal = (props) => {
           id=""
           placeholder="search"
         />
-        {appData.data.map((child, i) => {
+        {selectedApps.map((child, i) => {
           return (<div className="cover" key={i}>
-            <div className="itemSelector">{child.app_name}</div>
+            <div onClick={handleAppSelect} className="itemSelector">{child.app_name}</div>
             <span className="subTitle">{child.app_id}</span>
           </div>)
         })}
-      </>
+        </div>
     );
   }
 
   return (
     <>
-      <div className="modal">{innerContent}</div>
+        {innerContent}
     </>
   );
 };
