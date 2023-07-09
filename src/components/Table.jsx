@@ -2,7 +2,8 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import { useSelector, useDispatch } from "react-redux";
 import {
   updateFilterState,
-  filterElementOut
+  filterElementOut,
+  updateSelectedApps
 } from "../features/dataSlice";
 import FilterModal from "./FilterModal";
 import { useEffect } from "react";

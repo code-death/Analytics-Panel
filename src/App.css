@@ -195,13 +195,16 @@ body {
 .modal {
   z-index: 100;
   position: absolute;
-  width: 315px;
+  width: max-content;
   padding: 20px;
   background-color: white;
   border: 1.7px solid #EAEAEA;
   border-radius: 7px;
   margin-top: 45px;
   margin-left: 10px;
+}
+.rs-slider {
+  width: 250px;
 }
 
 .range {
@@ -236,7 +239,15 @@ body {
   width: 100%;
   border-radius: 9px;
 }
-
+.cover {
+  padding: 0px 10px;
+  cursor: pointer;
+}
+.modal .selected {
+  background-color: #136FED;
+  color: white;
+  border-radius: 4px;
+}
 .search:focus {
   outline: none;
 }
@@ -246,4 +257,10 @@ body {
 }
 .subTitle {
   font-size: 12px;
+}
+
+.appModalButton {
+  margin-top: 16px;
+  margin-left: 132px;
+  position: relative;
 }
