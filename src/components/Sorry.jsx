@@ -1,6 +1,8 @@
 import React from 'react'
 
 const Sorry = () => {
+  window.sessionStorage.clear()
+
   return (
     <div className="container">
         <img src="/writingPad.svg" width="235px" height="223px" alt="" />

@@ -1,12 +1,3 @@
-const changeDateFormat = (date) => {
-  return (
-    date.getFullYear() +
-    "-" +
-    ("0" + date.getMonth()).slice(-2) +
-    "-" +
-    ("0" + date.getDate()).slice(-2)
-  );
-};
 
 export const fetchData = async (startDate, endDate) => {
 
@@ -17,23 +8,20 @@ export const fetchData = async (startDate, endDate) => {
         const responseAppData = await fetch("https://go-dev.greedygame.com/v3/dummy/apps")
         const data = await responseData.json();
       const app = await responseAppData.json();
-      window.sessionStorage.setItem('datakey', JSON.stringify({data: data, app: app}))
+      window.sessionStorage.setItem('datakey', JSON.stringify({data: data, app: app, dates: ['2021-05-01', '2021-05-03']}))
       return {data, app}
       } catch (e) {
         return e
       }
     } else {
       try {
-        const sd = changeDateFormat(startDate);
-      const ed = changeDateFormat(endDate);
-
-      const url = `https://go-dev.greedygame.com/v3/dummy/report?startDate=${sd}&endDate=${ed}`;
+      const url = `https://go-dev.greedygame.com/v3/dummy/report?startDate=${startDate}&endDate=${endDate}`;
       const responseData = await fetch(url)
       const responseAppData = await fetch("https://go-dev.greedygame.com/v3/dummy/apps")
 
       const data = await responseData.json();
       const app = await responseAppData.json();
-      window.sessionStorage.setItem('datakey', JSON.stringify({data: data, app: app}))
+      window.sessionStorage.setItem('datakey', JSON.stringify({data: data, app: app, dates: [startDate, endDate]}))
       return {data, app}
       } catch (e) {
         return e
