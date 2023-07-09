@@ -90,6 +90,7 @@ export const dataSlice = createSlice({
                 },
               ],
             rowsToFilter: [],
+            selectedAppsFilter: [],
         }
     },
     reducers: {
@@ -126,9 +127,19 @@ export const dataSlice = createSlice({
                     state.value.rowsToFilter = state.value.rowsToFilter.concat(action.payload.array)
                 }
             })
+        },
+        updateSelectedApps: (state, action) => {
+            state.value.selectedAppsFilter = action.payload
+            let arr = []
+            action.payload.map((child) => {
+                state.value.data.data.forEach((curr, i) => {
+                    curr.app_id === child.app_id ? arr.push(i) : null
+                })
+            })
+            state.value.rowsToFilter = arr
         }
     }
 })
 
-export const {updateArray, updateData, updateAppData, updateFilterState, updateFilterRange, filterElementOut} = dataSlice.actions
+export const {updateArray, updateData, updateAppData, updateFilterState, updateFilterRange, filterElementOut, updateSelectedApps} = dataSlice.actions
 export default dataSlice.reducer

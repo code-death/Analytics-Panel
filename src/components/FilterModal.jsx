@@ -3,12 +3,13 @@ import {
   updateFilterRange,
   updateFilterState,
   filterElementOut,
+  updateSelectedApps
 } from "../features/dataSlice";
 import { RangeSlider } from "rsuite";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-const FilterModal = (props) => {
-  const { array, data, appData } = useSelector((state) => state.data.value);
+const FilterModal = () => {
+  const { array, data, appData, selectedAppsFilter } = useSelector((state) => state.data.value);
   const dispatch = useDispatch();
   const requiredElement = array.filter((child, i) => {
     return child.isFilterActive;
@@ -34,7 +35,9 @@ const FilterModal = (props) => {
       max_value_Object[requiredElement[0].item]) *
       100,
   ]);
-  const [selectedApps, setSelectedApps] = useState(appData.data)
+  const [selectedApps, setSelectedApps] = useState(selectedAppsFilter)
+  const [searchValue, setSearchValue] = useState('')
+  const [filteredApp, setFilteredApp] = useState(appData.data)
 
   const handleChange = (e) => {
     setValue(e);
@@ -87,8 +90,43 @@ const FilterModal = (props) => {
     return filteredRows;
   };
 
-  const handleAppSelect = () => {
+  const handleInputChange = (e) => {
+    setFilteredApp(appData.data)
+    setSearchValue(e.target.value)
+    const updatedApps = appData.data.filter(child => (
+      child.app_name.toLowerCase().indexOf(e.target.value.toLowerCase()) !== -1
+    ))
+    setFilteredApp(updatedApps)
+  }
 
+  const handleSelectAll = () => {
+    let updatedApps = [...appData.data]
+    if(selectedApps.length === updatedApps.length) {
+      updatedApps = []
+    }
+    setSelectedApps(updatedApps)
+    dispatch(updateSelectedApps(updatedApps))
+    dispatch(updateFilterState('App'))
+
+  }
+
+  const handleAppSelect = (e) => {
+    if(e.target.innerHTML === 'Apply') {
+      e.target.value ? dispatch(updateSelectedApps(selectedApps)) : null
+      dispatch(updateFilterState('App'))
+    } else {
+    const updatedApps = [...selectedApps]
+    appData.data.map((child, i) => {
+      if(child.app_name === e.target.innerHTML) {
+        if(updatedApps.indexOf(child) === -1){
+          updatedApps.push(child)
+        } else {
+          updatedApps.splice(updatedApps.indexOf(child), 1)
+        }
+      }
+    })
+    setSelectedApps(updatedApps)
+    }
   }
 
   if (
@@ -133,14 +171,32 @@ const FilterModal = (props) => {
           type="text"
           name=""
           id=""
-          placeholder="search"
+          placeholder="Search"
+          value={searchValue}
+          onChange={handleInputChange}
         />
-        {selectedApps.map((child, i) => {
-          return (<div className="cover" key={i}>
-            <div onClick={handleAppSelect} className="itemSelector">{child.app_name}</div>
-            <span className="subTitle">{child.app_id}</span>
-          </div>)
+        {appData.data.map((child, i) => {
+          let selected = ''
+          if(selectedApps.indexOf(child) !== -1) {
+            selected = ' selected'
+          }
+          if(filteredApp.indexOf(child) !== -1) {
+            return (
+              <div onClick={handleAppSelect} className={"cover" + selected} key={child.app_id}>
+              <div  className="itemSelector">{child.app_name}</div>
+              <span className="subTitle">{child.app_id}</span>
+            </div>
+            )
+          }
         })}
+        <div className="buttonGroup">
+        <button onClick={handleSelectAll} className="minimal">
+            Select All
+          </button>
+        <button onClick={handleAppSelect} value='apply' className="primary appModalButton">
+            Apply
+          </button>
+        </div>
         </div>
     );
   }
