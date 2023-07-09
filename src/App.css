@@ -12,7 +12,7 @@ body {
   top: 0;
   left: 0;
   width: 4vw;
-  height: 100vh;
+  height: 100%;
   background-color: #192F48;
   z-index: 10;
 }
