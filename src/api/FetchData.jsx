@@ -9,12 +9,15 @@ const changeDateFormat = (date) => {
 };
 
 export const fetchData = async (startDate, endDate) => {
+
+
     if (!startDate && !endDate) {
       try {
         const responseData = await fetch("https://go-dev.greedygame.com/v3/dummy/report?startDate=2021-05-01&endDate=2021-05-03")
         const responseAppData = await fetch("https://go-dev.greedygame.com/v3/dummy/apps")
         const data = await responseData.json();
       const app = await responseAppData.json();
+      window.sessionStorage.setItem('datakey', JSON.stringify({data: data, app: app}))
       return {data, app}
       } catch (e) {
         return e
@@ -30,6 +33,7 @@ export const fetchData = async (startDate, endDate) => {
 
       const data = await responseData.json();
       const app = await responseAppData.json();
+      window.sessionStorage.setItem('datakey', JSON.stringify({data: data, app: app}))
       return {data, app}
       } catch (e) {
         return e

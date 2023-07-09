@@ -3,7 +3,11 @@ import DatePicker from "./DatePicker";
 import TuneIcon from "@mui/icons-material/Tune";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import { updateData, updateAppData, filterElementOut } from "../features/dataSlice";
+import {
+  updateData,
+  updateAppData,
+  filterElementOut,
+} from "../features/dataSlice";
 import Table from "./Table";
 import Sorry from "./Sorry";
 import Settings from "./Settings.jsx";
@@ -11,9 +15,9 @@ import { fetchData } from "../api/FetchData";
 
 const Main = () => {
   const reduxData = useSelector((state) => state.data.value);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-const [error, setError] = useState(false)
+  const [error, setError] = useState(false);
   const [settingsOpen, setsettingsOpen] = useState(false);
 
   const handleSettingsClick = () => {
@@ -21,15 +25,21 @@ const [error, setError] = useState(false)
   };
 
   useEffect(() => {
-      fetchData().then(value => {
-        if(value instanceof Error) {
-            setError(true)
+    const sessionData = JSON.parse(window.sessionStorage.getItem("datakey"));
+    if (sessionData === null) {
+      fetchData().then((value) => {
+        if (value instanceof Error) {
+          setError(true);
         } else {
-        setError(false)
-        dispatch(updateData(value.data))
-        dispatch(updateAppData(value.app))
+          setError(false);
+          dispatch(updateData(value.data));
+          dispatch(updateAppData(value.app));
         }
-      })
+      });
+    } else {
+      dispatch(updateData(sessionData.data));
+      dispatch(updateAppData(sessionData.app));
+    }
   }, []);
 
   return (
@@ -43,7 +53,11 @@ const [error, setError] = useState(false)
         </button>
       </div>
       {settingsOpen ? <Settings handleClose={handleSettingsClick} /> : null}
-      {!error && (reduxData.data.data && reduxData.appData.data) ? <Table />: <Sorry />  }
+      {!error && reduxData.data.data && reduxData.appData.data ? (
+        <Table />
+      ) : (
+        <Sorry />
+      )}
     </div>
   );
 };

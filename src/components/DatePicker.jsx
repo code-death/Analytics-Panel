@@ -16,6 +16,7 @@ const DatePicker = () => {
     format='dd-MMM-yyyy'
     value={value}
     onChange={e => {
+      window.sessionStorage.setItem('datakey', {data: [], app: []})
       fetchData(e[0], e[1]).then(value => {
         dispatch(updateData(value.data))
         dispatch(updateAppData(value.app))

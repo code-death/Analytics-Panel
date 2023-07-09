@@ -22,6 +22,7 @@ const Table = (props) => {
   };
 
 useEffect(() => {
+
   let arr = []
   data.data.forEach((child,i) => {
     arr.push(i)

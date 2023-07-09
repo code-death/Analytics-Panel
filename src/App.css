@@ -193,6 +193,8 @@ body {
 }
 
 .modal {
+  max-height: 250px;
+  overflow-y: scroll;
   z-index: 100;
   position: absolute;
   width: max-content;
@@ -263,4 +265,13 @@ body {
   margin-top: 16px;
   margin-left: 132px;
   position: relative;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #7c7c7c;
+  border-radius: 10px;
 }
