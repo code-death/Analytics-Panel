@@ -7,6 +7,7 @@ import {
   updateData,
   updateAppData,
   filterElementOut,
+  updateDates,
 } from "../features/dataSlice";
 import Table from "./Table";
 import Sorry from "./Sorry";
@@ -25,7 +26,8 @@ const Main = () => {
   };
 
   useEffect(() => {
-    const sessionData = JSON.parse(window.sessionStorage.getItem("datakey"));
+    const sessionData = JSON.parse(window.sessionStorage.getItem("datakey"))
+
     if (sessionData === null) {
       fetchData().then((value) => {
         if (value instanceof Error) {
@@ -37,8 +39,9 @@ const Main = () => {
         }
       });
     } else {
-      dispatch(updateData(sessionData.data));
-      dispatch(updateAppData(sessionData.app));
+        dispatch(updateDates(sessionData.dates));
+        dispatch(updateData(sessionData.data));
+        dispatch(updateAppData(sessionData.app));
     }
   }, []);
 

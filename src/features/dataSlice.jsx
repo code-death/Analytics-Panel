@@ -91,6 +91,7 @@ export const dataSlice = createSlice({
               ],
             rowsToFilter: [],
             selectedAppsFilter: [],
+            dates: ['2021-05-01', '2021-05-03']
         }
     },
     reducers: {
@@ -137,9 +138,12 @@ export const dataSlice = createSlice({
                 })
             })
             state.value.rowsToFilter = arr
+        },
+        updateDates: (state, action) => {
+            state.value.dates = action.payload
         }
     }
 })
 
-export const {updateArray, updateData, updateAppData, updateFilterState, updateFilterRange, filterElementOut, updateSelectedApps} = dataSlice.actions
+export const {updateArray, updateData, updateAppData, updateFilterState, updateFilterRange, filterElementOut, updateSelectedApps, updateDates} = dataSlice.actions
 export default dataSlice.reducer
