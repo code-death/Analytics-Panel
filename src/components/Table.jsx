@@ -70,7 +70,7 @@ useEffect(() => {
     } else if (object.heading === "CTR") {
         return ((child.clicks / child.impressions) * 100).toPrecision(4) + "%";
     } else if (object.heading === "Revenue") {
-        return "$" + child[object.item] ? child[object.item].toPrecision(4) : null;
+        return child[object.item] ? "$ " + child[object.item].toPrecision(4) : null;
     } else if (object.heading === "Date") {
       const date = new Date(child[object.item]);
       return (
